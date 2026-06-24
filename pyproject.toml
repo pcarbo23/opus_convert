@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opus_convert"
+version = "0.1.0"
+description = "Converts Z39.86 DTBs to the NLS Smart Speaker streaming format."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "lxml",
+    "ffmpeg-python",
+    "langcodes"
+]
+
+[project.scripts]
+dtb-stream = "opus_convert.cli:main"
