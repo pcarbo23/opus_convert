@@ -41,3 +41,8 @@ env/
 *~
 *.bak
 src/opus_convert/audio_tmp-BU.py
+
+# Tests and Test Data
+tests/
+test_set/
+

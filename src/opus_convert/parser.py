@@ -138,6 +138,9 @@ class DTBParser:
         label_text = label_elem[0].text if label_elem else ""
         clean_label = " ".join(label_text.split()) if label_text else ""
 
+        if not clean_label and nav_class:
+            clean_label = nav_class.strip()
+
         content_elem = nav_point.xpath(".//*[local-name()='content']")
         raw_src = content_elem[0].get('src') if content_elem else None
 
@@ -155,7 +158,6 @@ class DTBParser:
                 f"DEBUG: SMIL lookup failed for NCX src: {raw_src} (normalized to {lookup_key}). This navPoint will have no audio reference.")
 
         node = {
-            "class": nav_class,
             "label": clean_label,
             "wav": lookup['wav'],
             "clipBegin": lookup['clipBegin']
