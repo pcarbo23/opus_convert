@@ -46,3 +46,6 @@ src/opus_convert/audio_tmp-BU.py
 tests/
 test_set/
 
+# Binaries and Libraries
+amr-dec
+libamr_bridge.dylib

@@ -30,12 +30,12 @@ class AudioEncoder:
                     self.bridge.convert_3gp_to_wav.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
                     self.bridge.convert_3gp_to_wav.restype = ctypes.c_int
                 except Exception as e:
-                    raise RuntimeError(f"Failed to load AMR-WB+ decoder library: {e}")
+                    raise RuntimeError(f"AMR-WB+ decoder not found at {lib_path}. Contact NLS/PICS Admin for assistance.")
         elif self.os_type == 'Linux':
             if self.linux_binary is None:
                 binary_path = Path(__file__).parent.absolute() / "amr-dec"
                 if not binary_path.exists():
-                    raise RuntimeError(f"AMR-WB+ decoder binary not found at {binary_path}")
+                    raise RuntimeError(f"AMR-WB+ decoder not found at {binary_path}. Contact NLS/PICS Admin for assistance.")
                 self.linux_binary = binary_path
         elif self.os_type == 'Windows':
             raise NotImplementedError("AMR-WB+ decoding is not currently supported on Windows.")

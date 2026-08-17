@@ -40,5 +40,14 @@ dtb-stream --master-zip ./my_dtb_book.zip ./output_dir
 
 # Process a 1206:2025 compliant PKG ZIP archive
 dtb-stream --pkg-zip ./my_pkg_book.zip ./output_dir
+
+# Alternatively, run directly as a module during development:
+python -m opus_convert.cli --master-dir ./my_dtb_book ./output_dir
 ```
+
+## AMR-WB+ Decoder Notice
+
+> [!IMPORTANT]
+> The AMR-WB+ codec is patent-protected, and its distribution is controlled by the National Library Service (NLS). Authorized users must contact the NLS PICS Admin in order to acquire the codec.
+
 
