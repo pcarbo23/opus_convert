@@ -59,6 +59,7 @@ class StreamingConverter:
                 master_timestamp = wav_offsets[wav_name] + node['clipBegin']
                 
                 final_node = {
+                    "class": node['class'],
                     "label": node['label'],
                     "etime": self._format_etime(master_timestamp)
                 }
