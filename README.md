@@ -1,5 +1,10 @@
 # opus_convert
 
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/pcarbo23/opus_convert)
+[![Python](https://img.shields.io/badge/python-3.9+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Spec: ANSI/NISO Z39.86-2005](https://img.shields.io/badge/spec-ANSI%2FNISO_Z39.86--2005-blue.svg)](https://www.daisy.org/z3986/2005/Z3986-2005.html)
+[![Spec: NLS Streaming Audiobook (Draft)](https://img.shields.io/badge/spec-NLS_Streaming_Audiobook_(Draft)-orange.svg)](#specifications)
+
 Converts Z39.86 DTBs to the NLS Smart Speaker streaming format.
 
 ## Installation & Setup
@@ -79,6 +84,13 @@ python -m opus_convert.cli --pkg-zip /path/to/db135170.pkg.zip ~/nlsbpd -k
   - Run the command from the project root directory rather than inside `src/` or `src/opus_convert/`.
   - Ensure the package has been installed with `pip install -e .`.
   - When using the `-m` flag, pass the module path `opus_convert.cli` without the `.py` extension (e.g., `python -m opus_convert.cli ...`).
+
+---
+
+## Specifications
+
+*   **Z39 DTB Specification**: [ANSI/NISO Z39.86-2005 (R2012)](https://www.daisy.org/z3986/2005/Z3986-2005.html) - Specifications for the Digital Talking Book.
+*   **NLS Streaming Audiobook Specification**: National Library Service (NLS) Smart Speaker Streaming Audiobook specification (*Draft*).
 
 ---
 

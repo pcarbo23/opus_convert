@@ -100,7 +100,7 @@ class StreamingConverter:
                 raise FileNotFoundError("Could not find internal .dtb.zip in PKG structure.")
             
             # Extensions to extract from the dtb.zip
-            valid_extensions = ['.opf', '.ncx', '.smil']
+            valid_extensions = ['.opf', '.ncx', '.smil', '.mp3', '.wav']
             if self.amr:
                 valid_extensions.append('.3gp')
 
@@ -182,8 +182,11 @@ class StreamingConverter:
                 'InteractiveResource'
             ]})
             output_data.update({"nls:generator": f"{tool_name} v{__version__}"})
-            output_data["dc:Date"] = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
+            # The spec says dc:Date should remain unchanged and OpusVal expects that therefore this is commented out:
+            # output_data["dc:Date"] = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
             output_data["dc:Publisher"] = "National Library Service for the Blind and Print Disabled, Library of Congress"
+            # The spec says dc:Rights should must be updated to the new verbiage:
+            output_data["dc:Rights"] = "Further reproduction or distribution in other than an accessible format is prohibited"
             output_data["dc:Format"] = [
                 "application/audiobook+zip", 
                 "audio/opus", 

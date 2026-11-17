@@ -73,9 +73,10 @@ class DTBParser:
         tree = etree.parse(str(self.opf_file))
 
         # Core Dublin Core fields to retain
+        # Removed Rights, added Date to accord with the spec
         dc_fields = {
             'Title', 'Creator', 'Description', 'Publisher',
-            'Format', 'Language', 'Rights', 'Identifier'
+            'Format', 'Language', 'Date', 'Identifier'
         }
         
         # Specific Extended Metadata fields to retain
@@ -202,26 +203,26 @@ class DTBParser:
 
                 audio_tag = audio[0]
                 src = audio_tag.get('src')
-                if not src:
-                    continue
-
                 raw_file = src.split('#')[0] if '#' in src else src
-                
-                # Enforce .wav unless AMR is explicitly allowed
-                if self.use_amr:
-                    wav_file = raw_file
-                else:
-                    wav_file = str(Path(raw_file).with_suffix('.wav'))
 
-                if wav_file not in seen_wavs:
-                    wav_sequence.append(wav_file)
-                    seen_wavs.add(wav_file)
+                # Preserve audio file if it exists, or if AMR is requested;
+                # fallback to .wav for master workflows where SMIL references are mapped to .wav
+                if self.use_amr or (self.dtb_dir / raw_file).exists():
+                    audio_file = raw_file
+                elif (self.dtb_dir / Path(raw_file).with_suffix('.wav').name).exists():
+                    audio_file = Path(raw_file).with_suffix('.wav').name
+                else:
+                    audio_file = str(Path(raw_file).with_suffix('.wav'))
+
+                if audio_file not in seen_wavs:
+                    wav_sequence.append(audio_file)
+                    seen_wavs.add(audio_file)
 
                 par_id = par.get('id')
                 # Normalize SMIL lookup key: filename#id
                 smil_ref = f"{smil_path.name}#{par_id}"
                 smil_lookup[smil_ref] = {
-                    'wav': wav_file,
+                    'wav': audio_file,
                     'clipBegin': self._parse_npt(audio_tag.get('clipBegin'))
                 }
 

@@ -83,21 +83,38 @@ class AudioEncoder:
         sys.stdout.write("\r" + " " * (len(message) + 2) + "\r")
         sys.stdout.flush()
 
-    def _calculate_pcm_md5(self, wav_files: list[Path]) -> str:
-        """Calculates MD5 hash of raw PCM data from multiple WAV files."""
+    def _calculate_pcm_md5(self, audio_files: list[Path]) -> str:
+        """Calculates MD5 hash of raw PCM data from multiple audio files (WAV, MP3, etc.)."""
         md5 = hashlib.md5()
         chunk_size = 65536  # 64KB
         
-        for wav_path in wav_files:
-            try:
-                with wave.open(str(wav_path), 'rb') as wf:
+        for audio_path in audio_files:
+            if audio_path.suffix.lower() == '.wav':
+                try:
+                    with wave.open(str(audio_path), 'rb') as wf:
+                        while True:
+                            data = wf.readframes(chunk_size // (wf.getsampwidth() * wf.getnchannels()))
+                            if not data:
+                                break
+                            md5.update(data)
+                except wave.Error as e:
+                    print(f"Warning: Could not read PCM data from {audio_path}: {e}")
+            else:
+                # Direct decoding to PCM without creating intermediate WAV files
+                try:
+                    process = (
+                        ffmpeg.input(str(audio_path))
+                        .output('pipe:', format='s16le')
+                        .run_async(pipe_stdout=True, pipe_stderr=True)
+                    )
                     while True:
-                        data = wf.readframes(chunk_size // (wf.getsampwidth() * wf.getnchannels()))
-                        if not data:
+                        chunk = process.stdout.read(chunk_size)
+                        if not chunk:
                             break
-                        md5.update(data)
-            except wave.Error as e:
-                print(f"Warning: Could not read PCM data from {wav_path}: {e}")
+                        md5.update(chunk)
+                    process.wait()
+                except Exception as e:
+                    print(f"Warning: Could not decode PCM data from {audio_path}: {e}")
         
         return md5.hexdigest()
 
